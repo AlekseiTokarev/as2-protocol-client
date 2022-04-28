@@ -26,16 +26,16 @@ public class As2ClientStarter {
     public static void main(String[] args) {
         As2ClientStarter starter = new As2ClientStarter();
 
-        ByteArrayDataSource document = new ByteArrayDataSource(getBytes("request.xml"), null, null);
+        ByteArrayDataSource document = new ByteArrayDataSource(getBytes("request.xml"), CMimeType.APPLICATION_XML.getAsString(), null);
         starter.sendAs2Request(document);
     }
 
-    private void sendAs2Request(DataSource document) {
+    public void sendAs2Request(DataSource document) {
         AS2ClientSettings settings = getAs2ClientSettings();
 
         AS2ClientRequest request = new AS2ClientRequest("AS2 test message from as2-lib");
         request.setData(new DataHandler(document));
-        request.setContentType(CMimeType.APPLICATION_XML.getAsString());
+        request.setContentType(document.getContentType());
 
         AS2ClientResponse response = new AS2Client().sendSynchronous(settings, request);
         if (response.hasException()) {
