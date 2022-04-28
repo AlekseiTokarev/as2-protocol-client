@@ -52,26 +52,19 @@ public class As2ClientStarter {
 
         settings.setPartnershipName(settings.getSenderAS2ID() + "_" + settings.getReceiverAS2ID());
 
-        final ECryptoAlgorithmSign eSignAlgo = ECryptoAlgorithmSign.DIGEST_SHA_256;
-
-        final ECryptoAlgorithmCrypt eCryptAlgo = ECryptoAlgorithmCrypt.CRYPT_3DES;
-
-        final ECompressionType eCompress = ECompressionType.ZLIB;
-        final boolean bCompressBeforeSigning = true;
+        ECryptoAlgorithmSign signAlgo = ECryptoAlgorithmSign.DIGEST_SHA_256;
 
         DispositionOptions mdnOptions = new DispositionOptions()
-                .setMICAlg(eSignAlgo)
+                .setMICAlg(signAlgo)
                 .setMICAlgImportance(DispositionOptions.IMPORTANCE_REQUIRED)
                 .setProtocol(DispositionOptions.PROTOCOL_PKCS7_SIGNATURE)
                 .setProtocolImportance(DispositionOptions.IMPORTANCE_REQUIRED);
         settings.setMDNOptions(mdnOptions);
 
-        settings.setEncryptAndSign(eCryptAlgo, eSignAlgo);
-        settings.setCompress(eCompress, bCompressBeforeSigning);
+        settings.setEncryptAndSign(ECryptoAlgorithmCrypt.CRYPT_3DES, signAlgo);
+        settings.setCompress(ECompressionType.ZLIB, true);
 
-        settings.setEncryptAndSign(eCryptAlgo, eSignAlgo);
-        settings.setCompress(eCompress, bCompressBeforeSigning);
-        settings.setMessageIDFormat("github-phax-as2-lib-$date.uuuuMMdd-HHmmssZ$-$rand.1234$@$msg.sender.as2_id$_$msg.receiver.as2_id$");
+        settings.setMessageIDFormat("assurant-$date.uuuuMMdd-HHmmssZ$-$rand.1234$@$msg.sender.as2_id$_$msg.receiver.as2_id$");
         settings.setRetryCount(1);
         settings.setConnectTimeoutMS(10_000);
         settings.setReadTimeoutMS(10_000);
