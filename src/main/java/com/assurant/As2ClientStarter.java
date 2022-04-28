@@ -15,6 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.activation.DataHandler;
+import javax.activation.DataSource;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -24,23 +25,23 @@ public class As2ClientStarter {
 
     public static void main(String[] args) {
         As2ClientStarter starter = new As2ClientStarter();
-        starter.sendAs2Request();
+
+        ByteArrayDataSource document = new ByteArrayDataSource(getBytes("request.xml"), null, null);
+        starter.sendAs2Request(document);
     }
 
-    private void sendAs2Request() {
+    private void sendAs2Request(DataSource document) {
         AS2ClientSettings settings = getAs2ClientSettings();
 
-        // Build client request
-        final AS2ClientRequest aRequest = new AS2ClientRequest("AS2 test message from as2-lib");
-        aRequest.setData(new DataHandler(new ByteArrayDataSource(getBytes("request.xml"), null, null)));
-        aRequest.setContentType(CMimeType.APPLICATION_XML.getAsString());
+        AS2ClientRequest request = new AS2ClientRequest("AS2 test message from as2-lib");
+        request.setData(new DataHandler(document));
+        request.setContentType(CMimeType.APPLICATION_XML.getAsString());
 
-        // Send message
-        final AS2ClientResponse response = new AS2Client().sendSynchronous(settings, aRequest);
+        AS2ClientResponse response = new AS2Client().sendSynchronous(settings, request);
         if (response.hasException()) {
             LOGGER.error(response.getAsString());
         }
-        LOGGER.info("Done");
+        LOGGER.info("successfully completed");
     }
 
     private AS2ClientSettings getAs2ClientSettings() {
@@ -71,7 +72,7 @@ public class As2ClientStarter {
         return settings;
     }
 
-    private byte[] getBytes(String path) {
+    private static byte[] getBytes(String path) {
         ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
         try {
             return getBytesFromInputStream(classLoader.getResourceAsStream(path));
