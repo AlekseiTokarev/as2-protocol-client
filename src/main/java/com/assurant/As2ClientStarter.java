@@ -22,6 +22,7 @@ import java.io.InputStream;
 
 public class As2ClientStarter {
     private final static Logger LOGGER = LoggerFactory.getLogger(As2ClientStarter.class);
+    private static final String AS2_URL = "http://localhost:8082/as2";
 
     public static void main(String[] args) {
         As2ClientStarter starter = new As2ClientStarter();
@@ -49,8 +50,7 @@ public class As2ClientStarter {
         settings.setKeyStore(EKeyStoreType.PKCS12, getBytes("openAs2_certs.p12"), "testas2");
 
         settings.setSenderData("PartnerA_OID", "as2msgs@partnera.com", "partnera");
-        settings.setReceiverData("MyCompany_OID", "mycompany", "http://localhost:10080/HttpReceiverr");
-
+        settings.setReceiverData("MyCompany_OID", "mycompany", AS2_URL);
         settings.setPartnershipName(settings.getSenderAS2ID() + "_" + settings.getReceiverAS2ID());
 
         ECryptoAlgorithmSign signAlgo = ECryptoAlgorithmSign.DIGEST_SHA_256;
