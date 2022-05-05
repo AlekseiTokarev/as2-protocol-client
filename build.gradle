@@ -13,17 +13,6 @@ jar {
     }
     exclude("META-INF/*.RSA", "META-INF/*.DSA", "META-INF/*.SF")
 }
-//task fatJar(type: Jar) {
-//    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-//    manifest {
-//        attributes 'Main-Class': 'com.assurant.As2ClientStarter'
-//    }
-//    archiveClassifier = "all"
-//    from {
-//        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
-//    }
-//    with jar
-//}
 
 repositories {
     mavenCentral()
