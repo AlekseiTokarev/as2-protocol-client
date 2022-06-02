@@ -40,9 +40,10 @@ public class As2ClientStarter {
 
         AS2ClientResponse response = new AS2Client().sendSynchronous(settings, request);
         if (response.hasException()) {
-            LOGGER.error(response.getAsString());
+            LOGGER.error("Error occurred: {}", response.getAsString());
+            return;
         }
-        LOGGER.info("successfully completed");
+        LOGGER.info("Successfully completed");
     }
 
     private AS2ClientSettings getAs2ClientSettings() {
@@ -50,7 +51,7 @@ public class As2ClientStarter {
         settings.setKeyStore(EKeyStoreType.PKCS12, getBytes("openAs2_certs.p12"), "testas2");
 
         settings.setSenderData("PartnerA_OID", "as2msgs@partnera.com", "partnera");
-        settings.setReceiverData("MyCompany_OID", "mycompany", AS2_URL);
+        settings.setReceiverData("Assurant_OID", "mycompany", AS2_URL);
         settings.setPartnershipName(settings.getSenderAS2ID() + "_" + settings.getReceiverAS2ID());
 
         ECryptoAlgorithmSign signAlgo = ECryptoAlgorithmSign.DIGEST_SHA_256;
